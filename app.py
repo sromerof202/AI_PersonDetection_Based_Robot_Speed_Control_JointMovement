@@ -7,6 +7,10 @@ from lib64 import jkrc
 # Initialize YOLO model
 model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
 
+# Check if CUDA is available and if so, use it
+if torch.cuda.is_available():
+    model = model.to('cuda')
+
 # Initialize camera
 cap = cv2.VideoCapture(0)  # Adjust '0' to your camera ID
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)  # Set the width to 640 pixels
@@ -19,11 +23,11 @@ if not cap.isOpened():
 PI = 3.1415926
 ABS = 0
 joint_pos1 = [PI/20, PI/17, PI/130, PI/4, 0, 0]
-joint_pos2 = [1, 2.5, 1, 1, 1, 1]  # Define the second joint position
+joint_pos2 = [1, 1, 1, 1, 1, 1]  # Define the second joint position
 
 # Connect to robot
 try:
-    robot = jkrc.RC("192.168.0.111")  # Adjust IP address
+    robot = jkrc.RC("192.168.0.124")  # Adjust IP address
     robot.login()
     robot.power_on()
     robot.enable_robot()
@@ -35,6 +39,10 @@ def detect_person(frame):
     # Preprocess frame
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     frame_rgb = torch.from_numpy(frame_rgb).float().permute(2, 0, 1).unsqueeze(0) / 255.0
+
+    # Move the frame to the GPU if CUDA is available
+    if torch.cuda.is_available():
+        frame_rgb = frame_rgb.to('cuda')
 
     results = model(frame_rgb)
     # Find the maximum class score and its corresponding class for each anchor box
@@ -69,7 +77,7 @@ try:
         else:
             # Gradually increase speed if no person detected
             if speed < 1:
-                speed += 0.3  # Increase speed by 10%
+                speed += 0.3  # Increase speed by 30%
 
         # Move robot joints
         print("Moving to position...")
@@ -77,17 +85,9 @@ try:
             robot.joint_move(joint_pos1, ABS, True, speed)
         else:
             robot.joint_move(joint_pos2, ABS, True, speed)
-        time.sleep(0.1)  # Wait for 3 seconds
-
-        # Display the resulting frame
-        cv2.imshow('Frame', frame)
-
-        # Break the loop on 'q' key press
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        #time.sleep(0.1)  # Wait for 0 seconds
 
 finally:
     # Clean up
     robot.logout()
     cap.release()
-    cv2.destroyAllWindows()
