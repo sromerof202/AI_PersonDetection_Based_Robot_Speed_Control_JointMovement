@@ -5,3 +5,5 @@ This project could be called "Person-Detection-Based Robot Speed Control".
  Depending on whether a person is detected or not, it adjusts the speed of a robot.
  
   The robot's joints are moved in a pattern, and the speed of these movements is controlled based on the presence or absence of a person in the camera's view.
+
+  Things you need--> JakaAPI Lib64
