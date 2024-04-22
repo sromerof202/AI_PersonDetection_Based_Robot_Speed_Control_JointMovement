@@ -71,11 +71,6 @@ try:
             # Reduce speed if person detected
             speed = 0.1  # Slow down the robot to 10% of its normal speed
 
-            # Draw bounding boxes on frame
-            for *xyxy, conf, cls in results:
-                if cls == 0:  # Person class
-                    cv2.rectangle(frame, (int(xyxy[0]), int(xyxy[1])), (int(xyxy[2]), int(xyxy[3])), (0, 255, 0), 2)
-
         else:
             # Gradually increase speed if no person detected
             if speed < 1:
