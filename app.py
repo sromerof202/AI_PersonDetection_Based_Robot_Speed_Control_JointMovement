@@ -23,7 +23,9 @@ if not cap.isOpened():
 PI = 3.1415926
 ABS = 0
 joint_pos1 = [PI/20, PI/17, PI/130, PI/4, 0, 0]
-joint_pos2 = [1, 1, 1, 1, 1, 1]  # Define the second joint position
+joint_pos2 = [1, 0.6, 1, 1, 1, 1]  
+joint_pos3 = [1, 1, 1, 1, 1, 1]  
+joint_pos4 = [1, 1.5, 1, 1, 1, 1]  
 
 # Connect to robot
 try:
@@ -81,11 +83,14 @@ try:
 
         # Move robot joints
         print("Moving to position...")
-        if i % 2 == 0:
+        if i % 4 == 0:
             robot.joint_move(joint_pos1, ABS, True, speed)
-        else:
+        elif i % 4 == 1:
             robot.joint_move(joint_pos2, ABS, True, speed)
-        #time.sleep(0.1)  # Wait for 0 seconds
+        elif i % 4 == 2:
+            robot.joint_move(joint_pos3, ABS, True, speed)
+        else:
+            robot.joint_move(joint_pos4, ABS, True, speed)
 
 finally:
     # Clean up
