@@ -1,4 +1,4 @@
-This project could be called "Person-Detection-Based Robot Speed Control".
+"Person-Detection-Based Robot Speed Control"
 
  It uses a YOLO model to detect persons in the frames captured by a camera. 
  
