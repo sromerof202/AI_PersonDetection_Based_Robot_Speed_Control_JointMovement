@@ -29,7 +29,7 @@ joint_pos4 = [1, 1.5, 1, 1, 1, 1]
 
 # Connect to robot
 try:
-    robot = jkrc.RC("192.168.0.124")  # Adjust IP address
+    robot = jkrc.RC("10.5.5.100")  # Adjust IP address
     robot.login()
     robot.power_on()
     robot.enable_robot()
