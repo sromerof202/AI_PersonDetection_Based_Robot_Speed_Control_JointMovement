@@ -4,7 +4,7 @@ import time
 from lib64 import jkrc
 PI=3.1415926
 
-robot = jkrc.RC("192.168.0.124")
+robot = jkrc.RC("192.168.0.102")
 ret = robot.login()
 ret = robot.get_joint_position()
 if ret[0] == 0:
